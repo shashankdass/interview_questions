@@ -1,0 +1,58 @@
+# ["r", "r", "r", "r"] = "r"
+# ["r", "p", "r", "p"] = "r"
+# ["r", "p", "r", "r", "s", "r", "p", "r", "r", "s"] 
+
+#   r p r p 
+# r T F T F 
+# p F T F T 
+# r T F T F
+# p F T F T
+
+
+# next in squence
+
+
+# print("Hello")
+
+# 
+# Your last C# code is saved below:
+# using System;
+# 
+# public class Test
+# {
+#     public static void Main()
+#     {
+#         Console.WriteLine("Hello");
+#     }
+# }
+
+# rpsrpsr
+
+def find_repeating_pattern(a_lis):
+    
+    def check_pattern_exist(start, pattern_length):
+        values = []
+        for i in range(start, len(a_lis)- pattern_length):
+            if a_lis[i] == a_lis[i+pattern_length ]:
+                values.append(True)
+            else:
+                values.append(False)
+        return all(values)
+                
+    pattern_length = -1
+    for i in range(1,len(a_lis)):
+        if not check_pattern_exist(0, i):
+            continue
+        else:
+            pattern_length = i 
+            break
+    print(pattern_length)
+    if pattern_length != -1:
+        pattern = a_lis[:pattern_length]
+        print(pattern)
+        remainder = len(a_lis)% pattern_length
+        return pattern[remainder]
+    else:
+        return "No Pattern exist"
+               
+print(find_repeating_pattern(["r", "p", "r", "r", "s", "r", "p", "r", "r", "s"] ))
