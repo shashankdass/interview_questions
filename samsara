@@ -1,0 +1,96 @@
+# https://paper.dropbox.com/doc/Example-Set-Game-q0N46YK4ZNjVtyOkRfRvD
+import random
+
+class Card:
+    def __init__(self, shade, shape, number):
+        self.shade = shade
+        self.shape = shape
+        self.number = number
+    def __repr__(self):
+        return "Card: shade={}, shape={}, number={}".format(self.shade, self.shape, self.number)
+    def __str__(self):
+        return self.__repr__()
+
+             
+class DeckOfCards:
+    
+    def __init__(self, all_shades=[], all_shapes=[], all_numbers=[]):
+        self.cards = []
+        self.all_shades = all_shades
+        self.all_shapes = all_shapes
+        self.all_numbers = all_numbers
+        self.deal = []
+    
+    def create_deck(self):
+        for shade in self.all_shades:
+            for shape in self.all_shapes:
+                for number in self.all_numbers:
+                    card = Card(shade, shape, number)
+                    self.cards.append(card)
+    
+    def deal(self, num_of_cards=9):
+        for _ in range(num_of_cards):
+            index = random.randint(0,len(cards)-1)
+            self.deal.append(self.cards[index])
+            self.cards.remove(index)
+            
+    def is_set(self, cards):
+        def are_all_different(lis):
+            return lis[0] != lis[1] and lis[0] != lis[2] and lis[1] != lis[2]
+        
+        def are_all_same(lis):
+            first_val = lis[0]
+            for i in range(1,len(lis)):
+                if lis[i] != first_val:
+                    return False
+            return True
+        
+        def check(lis):
+             return are_all_same(lis) or are_all_different(lis)
+        
+        def check_shape(lis_of_shapes):
+            return check(lis_of_shapes)
+        
+        def check_shade(lis_of_shades):
+            return check(lis_of_shades)
+        
+        def check_numbers(lis_of_numbers):
+            return check(lis_of_numbers)
+
+        
+        return check_shape([card.shape for card in cards]) and check_shade([card.shade for card in cards]) and check_numbers([card.number for card in cards])
+        
+    def find_set(self, cards):
+        if len(cards) < 3:
+            return "No possible set!!"
+        for i in range(len(cards)):
+            for j in range(i+1, len(cards)):
+                for k in range(j+1, len(cards)):
+                    if self.is_set([cards[i], cards[j], cards[k]]):
+                        return [cards[i], cards[j], cards[k]]
+        return "No possible set"
+                        
+card = Card(shade='clear', shape='diamond', number='1')
+
+shades = ['clear', 'striped', 'solid']
+shapes = ['diamond', 'oval', 'squiggle']
+numbers = ['1', '2', '3']
+
+# A set is valid if all three conditions hold:
+# 1. Shape: all the same shape OR all different shapes
+# 2. Shading: all the same shading OR all different shading
+# 3. Count: all the same count OR all different count
+
+# Example set:
+# ["circle", "solid", 1]
+# ["circle", "solid", 2]
+# ["circle", "solid", 3]
+dc = DeckOfCards()
+# dc.create_deck()
+card1 = Card("stripe", "circle", 1)
+card2 = Card("solid", "circle", 2)
+card3 = Card("solid", "circle", 3)
+card4 = Card("solid", "circle", 4)
+cards = [card1, card2, card3, card4]
+# print(dc.is_set(cards))
+print(dc.find_set(cards))
