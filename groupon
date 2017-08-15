@@ -1,0 +1,66 @@
+paths = [
+  ["a-3b7622e, /home"],
+  ["b-128a9d7, /home"],
+  ["a-3b7622e, /deals/spa"],
+  ["b-128a9d7, /deals/car_wash"],
+  ["c-7f8e61a, /deals/seattle"],
+  ["b-128a9d7, /home"],
+  ["d-d682a11, /deals/car_wash"],
+  ["a-3b7622e, /buy"],
+  ["b-128a9d7, /deals/spa"],
+  ["c-7f8e61a, /deals/coffee"],
+  ["b-128a9d7, /buy"],
+  ["c-7f8e61a, /buy"]
+]
+ # {<user_id> : [lis_paths]}
+
+from collections import defaultdict
+
+def intersection_list(lis1, lis2):
+    if not lis1 or not lis2 or len(lis1) < 3 or len(lis2) < 3:
+        return "Not valid lists!!"
+    
+    bigger_lis, smaller_lis = (lis1, lis2) if len(lis1)>len(lis2) else (lis2, lis1)
+    count,small_count = 0,0
+    values  = []
+    for i in range(0,len(bigger_lis)-2):
+        big_slice = bigger_lis[i:i+3]
+        for j in range(0,len(smaller_lis)-2):
+            small_slice = smaller_lis[j:j+3]
+            if big_slice == small_slice:
+                return big_slice
+    return values
+
+
+def get_max_3_path(a_lis):
+    if not a_lis:
+        return []
+    user_pattern_dict = defaultdict(list)
+    for lis in a_lis:
+        values = lis[0].split(',')
+        user_pattern_dict[values[0]].append(values[1])
+    
+    key_lis = list(user_pattern_dict.keys())
+    for i in range(len(key_lis)):
+        for j in range(i+1,len(key_lis)):
+            lis1, lis2 = user_pattern_dict[key_lis[i]], user_pattern_dict[key_lis[j]]
+            # print(lis1, lis2)
+            if len(lis1) >= 3 and len(lis2) >= 3:
+                intersected_values = intersection_list(user_pattern_dict[key_lis[i]], user_pattern_dict[key_lis[j]])
+                if intersected_values:
+                    return intersected_values
+                
+                                           
+                            
+    
+
+
+def popular_3_page_path(paths):
+    if not paths:
+        return []
+    return get_max_3_path(paths)
+
+expected =  ["/home", "/deals/spa", "/buy"]
+result = popular_3_page_path(paths)
+print(result)
+
